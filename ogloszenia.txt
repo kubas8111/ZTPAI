@@ -1,0 +1,42 @@
+Funkcjonalności:
+-Logowanie/Rejestracja
+-Dodawanie ogłoszeń
+-Przeglądanie ogłoszeń
+-Szczegóły ogłoszenia
+-Wyszukiwarka
+
+Podstrony:
+-logowanie
+-rejestracja
+-strona główna
+-panel użytkownika
+-dodawanie ogłoszenia
+-posty użytkownika
+-strona z postem
+
+Logowanie:
+Odbywać się będzie za pomocą emailu i hasła
+
+Rejestracja:
+Do rejestracji wymagany jest email, hasło, imię
+opcjonalne telefon
+
+Strona główna:
+Zawiera pasek menu u góry, możliwość dodania ogłoszenia, ikonę do logowania/rejestracji, a jeśli zalogowano, to przejście do profilu;
+na środku pasek wyszukiwania oraz filtry;
+poniżej wyświetlane będą posty najnowsze;
+opcjonalnie stopka z kontaktem;
+
+Panel użytkownika:
+Zawiera dane o użytkowniku, możliwość edycji danych zatwierdzanych przyciskiem;
+Jest również link do Moich ogłoszeń;
+
+Dodawanie ogłoszenia:
+Zalogowany użytkownik może dodać;
+Nazwa ogłoszenia, krótki opis, długi opis dokładny, telefon kontaktowy, zdjęcie
+
+Posty użytkownika:
+po prostu wyświetla posty, które dodał zalogowany użytkownik
+
+Strona z ogłoszeniem:
+Pokazuje cały opis, dane kontaktowe
