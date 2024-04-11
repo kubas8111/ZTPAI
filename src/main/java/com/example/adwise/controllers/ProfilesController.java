@@ -1,31 +1,31 @@
-//package com.example.adwise.controllers;
-//
-//import com.example.adwise.models.User;
-//import com.example.adwise.repositories.UserRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.web.bind.annotation.*;
-//
-//@RestController
-//public class UsersController {
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @PostMapping("/add")
-//    public String addUser(@RequestParam String email, @RequestParam String password) {
-//        User user = new User();
-//        user.setEmail(email);
-//        user.setPassword(password);
-//        userRepository.save(user);
-//        return "Added new user";
-//    }
-//
-//    @GetMapping("/list")
-//    public Iterable<User> getUsers() {
-//        return userRepository.findAll();
-//    }
-//
-//    @GetMapping("/find/{id}")
-//    public User findUserById(@PathVariable Integer id) {
-//        return userRepository.findUserByUserId(id);
-//    }
-//}
+package com.example.adwise.controllers;
+
+import com.example.adwise.entities.Profile;
+import com.example.adwise.repositories.ProfileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class ProfilesController {
+    @Autowired
+    private ProfileRepository profileRepository;
+
+    @PostMapping("/add")
+    public String addProfile(@RequestParam String email, @RequestParam String password) {
+        Profile profile = new Profile();
+        profile.setEmail(email);
+        profile.setPassword(password);
+        profileRepository.save(profile);
+        return "Added new user";
+    }
+
+    @GetMapping("/list")
+    public Iterable<Profile> getProfiles() {
+        return profileRepository.findAll();
+    }
+
+    @GetMapping("/find/{id}")
+    public Profile findProfileById(@PathVariable Integer id) {
+        return profileRepository.findProfileByProfileId(id);
+    }
+}
