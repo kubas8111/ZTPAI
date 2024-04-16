@@ -1,0 +1,20 @@
+.category-section {
+    padding: 2rem 0;
+}
+
+.category-box {
+    height: 150px;
+    background-color: #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    border-radius: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .category-box {
+        height: 100px; /* Smaller height for mobile devices */
+    }
+}

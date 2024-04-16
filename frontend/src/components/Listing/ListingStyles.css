@@ -1,0 +1,33 @@
+.listing-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa; /* Match the design background */
+    border-radius: 0.25rem; /* Slightly rounded corners */
+}
+
+.listing-image {
+    background-color: #ddd; /* Placeholder color for the image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px; /* Fixed height for the image */
+}
+
+.listing-details {
+    padding-left: 1rem;
+}
+
+.listings-grid {
+    margin-top: 2rem;
+}
+
+@media (max-width: 767px) {
+    .listing-image {
+        height: 100px; /* Smaller height for mobile devices */
+        margin-bottom: 0.5rem;
+    }
+
+    .listing-details {
+        padding-left: 0;
+    }
+}
