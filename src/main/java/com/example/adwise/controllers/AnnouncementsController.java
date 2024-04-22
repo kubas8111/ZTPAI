@@ -1,28 +1,48 @@
 package com.example.adwise.controllers;
 
-import com.example.adwise.entities.Announcement;
-import com.example.adwise.repositories.AnnouncementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.adwise.DTO.AnnouncementDTO;
+import com.example.adwise.services.AnnouncementService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/announcement")
+@RequestMapping("/announcements")
 public class AnnouncementsController {
-    @Autowired
-    private AnnouncementRepository announcementRepository;
 
-//    @PostMapping("/add")
-//    public String addAnnouncement()
-    @GetMapping("/list")
-    public Iterable<Announcement> getAnnouncements() {
-        return announcementRepository.findAll();
+    private final AnnouncementService announcementService;
+
+    public AnnouncementsController(AnnouncementService announcementService) {
+        this.announcementService = announcementService;
     }
 
-    @GetMapping("/find/{id}")
-    public Announcement findAnnouncementById(@PathVariable Integer id) {
-        return announcementRepository.findAnnouncementByAnnouncementId(id);
+    @GetMapping
+    public ResponseEntity<Iterable<AnnouncementDTO>> getAllAnnouncements() {
+        Iterable<AnnouncementDTO> announcements = announcementService.getAllAnnouncements();
+        return new ResponseEntity<>(announcements, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AnnouncementDTO> getAnnouncementById(@PathVariable Long id) {
+        AnnouncementDTO announcementDTO = announcementService.getAnnouncementById(id);
+        return new ResponseEntity<>(announcementDTO, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<AnnouncementDTO> createAnnouncement(@RequestBody AnnouncementDTO announcementDTO) {
+        AnnouncementDTO createdAnnouncementDTO = announcementService.createAnnouncement(announcementDTO);
+        return new ResponseEntity<>(createdAnnouncementDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AnnouncementDTO> updateAnnouncement(@PathVariable Long id, @RequestBody AnnouncementDTO announcementDTO) {
+        AnnouncementDTO updatedAnnouncementDTO = announcementService.updateAnnouncement(id, announcementDTO);
+        return new ResponseEntity<>(updatedAnnouncementDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id) {
+        announcementService.deleteAnnouncement(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

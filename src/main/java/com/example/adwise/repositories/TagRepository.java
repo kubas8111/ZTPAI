@@ -2,7 +2,8 @@ package com.example.adwise.repositories;
 
 import com.example.adwise.entities.Tag;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TagRepository extends CrudRepository<Tag, Integer> {
-    Tag findTagByTagId(Integer tagId);
+@Repository
+public interface TagRepository extends CrudRepository<Tag, Long> {
 }

@@ -1,27 +1,39 @@
 package com.example.adwise.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Date;
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer announcementId;
-    private Integer profileId;
-    private Integer categoryId;
-    private Integer regionId;
-    private Integer tagId;
+    private Long announcementId;
+
+    @ManyToOne
+    @JoinColumn(name = "profileId", nullable = false)
+    private Profile profileId;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryId", nullable = false)
+    private Category categoryId;
+
+    @ManyToOne
+    @JoinColumn(name = "regionId", nullable = false)
+    private Region regionId;
+
+    @ManyToOne
+    @JoinColumn(name = "tagId", nullable = false)
+    private Tag tagId;
+
     private String title;
     private Double price;
     private String description;
-    private String createdDate;
+    private Date createdDate;
     private Boolean isActive;
     private String contactName;
     private String contactEmail;

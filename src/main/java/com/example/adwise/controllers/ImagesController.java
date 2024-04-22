@@ -1,26 +1,48 @@
 package com.example.adwise.controllers;
 
-import com.example.adwise.entities.Image;
-import com.example.adwise.repositories.ImageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.adwise.DTO.ImageDTO;
+import com.example.adwise.services.ImageService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/images")
 public class ImagesController {
-    @Autowired
-    private ImageRepository imageRepository;
 
-    @GetMapping("/list")
-    public Iterable<Image> getImages() {
-        return imageRepository.findAll();
+    private final ImageService imageService;
+
+    public ImagesController(ImageService imageService) {
+        this.imageService = imageService;
     }
 
-    @GetMapping("/find/{id}")
-    public Image findImageById(@PathVariable Integer id) {
-        return imageRepository.findImageByImageId(id);
+    @GetMapping
+    public ResponseEntity<Iterable<ImageDTO>> getAllImages() {
+        Iterable<ImageDTO> images = imageService.getAllImages();
+        return new ResponseEntity<>(images, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ImageDTO> getImageById(@PathVariable Long id) {
+        ImageDTO image = imageService.getImageById(id);
+        return new ResponseEntity<>(image, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<ImageDTO> createImage(@RequestBody ImageDTO imageDTO) {
+        ImageDTO createdImage = imageService.createImage(imageDTO);
+        return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ImageDTO> updateImage(@PathVariable Long id, @RequestBody ImageDTO imageDTO) {
+        ImageDTO updatedImage = imageService.updateImage(id, imageDTO);
+        return new ResponseEntity<>(updatedImage, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteImage(@PathVariable Long id) {
+        imageService.deleteImage(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

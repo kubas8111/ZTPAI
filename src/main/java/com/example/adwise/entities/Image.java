@@ -1,19 +1,20 @@
 package com.example.adwise.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer imageId;
-    private Integer announcementId;
+    private Long imageId;
+
+    @OneToOne
+    @JoinColumn(name = "announcementId", nullable = false)
+    private Announcement announcementId;
+
     private String imageURL;
 }

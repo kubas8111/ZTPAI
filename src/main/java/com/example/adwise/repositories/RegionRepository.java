@@ -2,7 +2,8 @@ package com.example.adwise.repositories;
 
 import com.example.adwise.entities.Region;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface RegionRepository extends CrudRepository<Region, Integer> {
-    Region findRegionByRegionId(Integer regionId);
+@Repository
+public interface RegionRepository extends CrudRepository<Region, Long> {
 }
