@@ -1,0 +1,30 @@
+.announcement-details {
+    padding: 2rem 0;
+}
+
+.announcement-card {
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.announcement-card img {
+    width: 100%;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+.announcement-card .card-body {
+    padding: 1rem;
+}
+
+.announcement-card .card-title {
+    font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .announcement-card .card-body {
+        padding: 0.5rem;
+    }
+}
