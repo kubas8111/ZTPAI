@@ -22,13 +22,13 @@ public class ProfilesController {
         return new ResponseEntity<>(profiles, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<ProfileDTO> getProfileById(@PathVariable Long id) {
         ProfileDTO profile = profileService.getProfileById(id);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json")
     public ResponseEntity<ProfileDTO> createProfile(@RequestBody ProfileDTO profileDTO) {
         ProfileDTO createdProfile = profileService.createProfile(profileDTO);
         return new ResponseEntity<>(createdProfile, HttpStatus.CREATED);

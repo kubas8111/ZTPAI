@@ -5,7 +5,7 @@ import "./ListingStyles.css";
 
 const ListingItem = ({ title, description, location }) => {
     return (
-        <Row className="listing-item">
+        <Row className="listing-item" onClick={() => {window.location.href = "/announcement"}}>
             <Col xs={12} md={3} className="listing-image">
                 <div>Zdjęcie</div>
             </Col>

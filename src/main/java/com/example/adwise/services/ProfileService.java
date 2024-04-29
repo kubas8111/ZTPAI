@@ -4,6 +4,10 @@ import com.example.adwise.DTO.ProfileDTO;
 import com.example.adwise.entities.Profile;
 import com.example.adwise.exceptions.ResourceNotFoundException;
 import com.example.adwise.repositories.ProfileRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +16,11 @@ import java.util.List;
 @Service
 public class ProfileService {
     private final ProfileRepository profileRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ProfileService(ProfileRepository profileRepository) {
+    public ProfileService(ProfileRepository profileRepository, PasswordEncoder passwordEncoder) {
         this.profileRepository = profileRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Iterable<ProfileDTO> getAllProfiles() {
@@ -32,7 +38,11 @@ public class ProfileService {
 
     public ProfileDTO createProfile(ProfileDTO profileDTO) {
         Profile profile = convertToEntity(profileDTO);
+        System.out.println(profile.getPassword());
+        profile.setPassword(passwordEncoder.encode(profile.getPassword()));
+
         Profile createdProfile = profileRepository.save(profile);
+
         return convertToDto(createdProfile);
     }
 
@@ -45,7 +55,7 @@ public class ProfileService {
         existingProfile.setFirstName(profileDTO.getFirstName());
         existingProfile.setLastName(profileDTO.getLastName());
         existingProfile.setPhone(profileDTO.getPhone());
-        existingProfile.setRole(profileDTO.getRole());
+        existingProfile.setIsAdmin(profileDTO.getIsAdmin());
 
         Profile updatedProfile = profileRepository.save(existingProfile);
         return convertToDto(updatedProfile);
@@ -63,7 +73,7 @@ public class ProfileService {
         profileDTO.setFirstName(profile.getFirstName());
         profileDTO.setLastName(profile.getLastName());
         profileDTO.setPhone(profile.getPhone());
-        profileDTO.setRole(profile.getRole());
+        profileDTO.setIsAdmin(profile.getIsAdmin());
         return profileDTO;
     }
 
@@ -75,7 +85,7 @@ public class ProfileService {
         profile.setFirstName(profileDTO.getFirstName());
         profile.setLastName(profileDTO.getLastName());
         profile.setPhone(profileDTO.getPhone());
-        profile.setRole(profileDTO.getRole());
+        profile.setIsAdmin(profileDTO.getIsAdmin());
         return profile;
     }
 }

@@ -11,8 +11,6 @@ const ListingsGrid = () => {
         { title: "Nazwa ogłoszenia", description: "Blablabla...", location: "Lokalizacja" },
         { title: "Nazwa ogłoszenia", description: "Blablabla...", location: "Lokalizacja" },
         { title: "Nazwa ogłoszenia", description: "Blablabla...", location: "Lokalizacja" },
-        { title: "Nazwa ogłoszenia", description: "Blablabla...", location: "Lokalizacja" },
-        { title: "Nazwa ogłoszenia", description: "Blablabla...", location: "Lokalizacja" },
     ];
 
     return (
