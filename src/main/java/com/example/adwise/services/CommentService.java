@@ -33,6 +33,13 @@ public class CommentService {
         return convertToDto(comment);
     }
 
+    public Iterable<CommentDTO> getCommentsByUserId(Long userId) {
+        Iterable<Comment> comments = commentRepository.findCommentsByCommentedProfileProfileId(userId);
+        List<CommentDTO> commentDTOs = new ArrayList<>();
+        comments.forEach(comment -> commentDTOs.add(convertToDto(comment)));
+        return commentDTOs;
+    }
+
     public CommentDTO createComment(CommentDTO commentDTO) {
         Comment comment = convertToEntity(commentDTO);
         Comment createdComment = commentRepository.save(comment);

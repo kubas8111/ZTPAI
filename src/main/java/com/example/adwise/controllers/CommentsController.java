@@ -28,6 +28,13 @@ public class CommentsController {
         return new ResponseEntity<>(commentDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Iterable<CommentDTO>> getCommentsByUserId(@PathVariable Long userId) {
+        Iterable<CommentDTO> comments = commentService.getCommentsByUserId(userId);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
+    }
+
+
     @PostMapping
     public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) {
         CommentDTO createdComment = commentService.createComment(commentDTO);

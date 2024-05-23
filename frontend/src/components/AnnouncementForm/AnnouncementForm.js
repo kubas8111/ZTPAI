@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 import "./AnnouncementFormStyles.css";
 
 const AnnouncementForm = () => {
@@ -10,31 +11,35 @@ const AnnouncementForm = () => {
     const [contactName, setContactName] = useState("");
     const [contactEmail, setContactEmail] = useState("");
     const [contactPhone, setContactPhone] = useState("");
-    const [category, setCategory] = useState("");
-    const [region, setRegion] = useState("");
-    const [tag, setTag] = useState("");
+    const [categoryOptions, setCategoryOptions] = useState([]);
+    const [regionOptions, setRegionOptions] = useState([]);
+    const [tagOptions, setTagOptions] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedRegion, setSelectedRegion] = useState("");
+    const [selectedTag, setSelectedTag] = useState("");
     const [image, setImage] = useState(null);
     const history = useHistory();
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const categoryResponse = await axios.get("http://localhost:8080/api/categories");
+                const regionResponse = await axios.get("http://localhost:8080/api/regions");
+                const tagResponse = await axios.get("http://localhost:8080/api/tags");
 
-        const formData = {
-            title: title,
-            price: price,
-            description: description,
-            contactName: contactName,
-            contactEmail: contactEmail,
-            contactPhone: contactPhone,
-            category: category,
-            region: region,
-            tag: tag,
-            image: image
+                setCategoryOptions(categoryResponse.data);
+                setRegionOptions(regionResponse.data);
+                setTagOptions(tagResponse.data);
+            } catch (error) {
+                console.error("Error fetching options:", error);
+            }
         };
 
-        console.log(formData);
+        fetchOptions();
+    }, []);
 
-        history.push("/home");
+    const handleSubmit = (event) => {
+        event.preventDefault();
     };
 
     const handleImageChange = (event) => {
@@ -79,34 +84,31 @@ const AnnouncementForm = () => {
 
                         <Form.Group controlId="formBasicCategory">
                             <Form.Label>Kategoria</Form.Label>
-                            <Form.Control as="select" value={category} onChange={(e) => setCategory(e.target.value)}>
+                            <Form.Control as="select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
                                 <option value="">Wybierz kategorię</option>
-                                <option value="1">Kategoria 1</option>
-                                <option value="2">Kategoria 2</option>
-                                <option value="3">Kategoria 3</option>
-                                {/* Dodaj więcej opcji, jeśli jest taka potrzeba */}
+                                {categoryOptions.map((category) => (
+                                    <option key={category.id} value={category.id}>{category.name}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicRegion">
                             <Form.Label>Region</Form.Label>
-                            <Form.Control as="select" value={region} onChange={(e) => setRegion(e.target.value)}>
+                            <Form.Control as="select" value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
                                 <option value="">Wybierz region</option>
-                                <option value="1">Region 1</option>
-                                <option value="2">Region 2</option>
-                                <option value="3">Region 3</option>
-                                {/* Dodaj więcej opcji, jeśli jest taka potrzeba */}
+                                {regionOptions.map((region) => (
+                                    <option key={region.id} value={region.id}>{region.name}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicTag">
                             <Form.Label>Tag</Form.Label>
-                            <Form.Control as="select" value={tag} onChange={(e) => setTag(e.target.value)}>
+                            <Form.Control as="select" value={selectedTag} onChange={(e) => setSelectedTag(e.target.value)}>
                                 <option value="">Wybierz tag</option>
-                                <option value="1">Tag 1</option>
-                                <option value="2">Tag 2</option>
-                                <option value="3">Tag 3</option>
-                                {/* Dodaj więcej opcji, jeśli jest taka potrzeba */}
+                                {tagOptions.map((tag) => (
+                                    <option key={tag.id} value={tag.id}>{tag.name}</option>
+                                ))}
                             </Form.Control>
                         </Form.Group>
 

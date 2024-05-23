@@ -21,6 +21,9 @@ const LoginForm = () => {
             const response = await api.post("auth/login", formData)
                 .then(response => {
                     console.log(response.data);
+                    const { accessToken, refreshToken } = response.data;
+                    localStorage.setItem("accessToken", accessToken);
+                    localStorage.setItem("refreshToken", refreshToken);
                 });
             history.push("/home");
         } catch (error) {

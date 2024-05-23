@@ -23,4 +23,5 @@ public class AnnouncementDTO {
     private String contactName;
     private String contactEmail;
     private String contactPhone;
+    private String imageUrl;
 }

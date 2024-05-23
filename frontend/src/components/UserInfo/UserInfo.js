@@ -1,17 +1,26 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import "./UserInfoStyles.css";
+import {useHistory} from "react-router-dom";
 
-const UserInfo = () => {
+const UserInfo = ({ announcement }) => {
+    const { contactName, contactEmail, contactPhone, profileId } = announcement;
+
+    const history = useHistory();
+
+    const handleListingClick = () => {
+        history.push(`/profile/${profileId.profileId}`);
+    };
+
     return (
-        <Card onClick={() => {window.location.href = "/profile"}}>
+        <Card onClick={handleListingClick}>
             <Card.Body>
-                <Card.Title>Imię i nazwisko</Card.Title>
+                <Card.Title>{contactName}</Card.Title>
                 <Card.Text>
-                    Telefon: 123-456-789
+                    Telefon: {contactPhone}
                 </Card.Text>
                 <Card.Text>
-                    Email: example@example.com
+                    Email: {contactEmail}
                 </Card.Text>
             </Card.Body>
         </Card>
