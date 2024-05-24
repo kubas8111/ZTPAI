@@ -11,7 +11,7 @@ const CommentList = ({ comments }) => {
                 {comments.map((comment, index) => (
                     <CommentItem
                         key={index}
-                        author={comment.author.firstName}
+                        author={comment.author}
                         date={comment.createdAt}
                         text={comment.content}
                         className="comment-item"

@@ -16,9 +16,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "authorId", nullable = false)
-    private Profile author;
+    private String author;
 
     @ManyToOne
     @JoinColumn(name = "commentedProfileId", referencedColumnName = "profileId", nullable = false)

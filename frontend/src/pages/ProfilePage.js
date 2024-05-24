@@ -17,6 +17,7 @@ const ProfilePage = () => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const currentUserId = 1; // Replace this with actual logic to get the current user ID
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -51,7 +52,7 @@ const ProfilePage = () => {
                         <Col md={8}>
                             <h3>Ogłoszenia użytkownika</h3>
                             <ListingsGrid listings={announcements} />
-                            <CommentForm userId={id} />
+                            <CommentForm userId={id} authorId={currentUserId} />
                             <CommentList comments={comments} />
                         </Col>
                         <Col md={4}>

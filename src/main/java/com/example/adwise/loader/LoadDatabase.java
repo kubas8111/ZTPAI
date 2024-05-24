@@ -147,16 +147,16 @@ public class LoadDatabase implements CommandLineRunner {
         Profile profile4 = this.profileRepository.findById(4L).orElseThrow();
         Profile profile5 = this.profileRepository.findById(5L).orElseThrow();
 
-        this.commentRepository.save(new Comment(null, profile2, profile3, "Great profile!", new Date()));
-        this.commentRepository.save(new Comment(null, profile3, profile4, "Nice ads!", new Date()));
-        this.commentRepository.save(new Comment(null, profile4, profile5, "Very helpful!", new Date()));
-        this.commentRepository.save(new Comment(null, profile5, profile2, "Thanks for the info!", new Date()));
-        this.commentRepository.save(new Comment(null, profile2, profile4, "Good service!", new Date()));
-        this.commentRepository.save(new Comment(null, profile3, profile5, "Highly recommended!", new Date()));
-        this.commentRepository.save(new Comment(null, profile4, profile2, "Awesome!", new Date()));
-        this.commentRepository.save(new Comment(null, profile5, profile3, "Very satisfied!", new Date()));
-        this.commentRepository.save(new Comment(null, profile2, profile5, "Fantastic experience!", new Date()));
-        this.commentRepository.save(new Comment(null, profile3, profile2, "Will use again!", new Date()));
+        this.commentRepository.save(new Comment(null, "John Doe", profile3, "Great profile!", new Date()));
+        this.commentRepository.save(new Comment(null, "Alice Smith", profile4, "Nice ads!", new Date()));
+        this.commentRepository.save(new Comment(null, "Robert Johnson", profile5, "Very helpful!", new Date()));
+        this.commentRepository.save(new Comment(null, "Emily Brown", profile2, "Thanks for the info!", new Date()));
+        this.commentRepository.save(new Comment(null, "Michael Wilson", profile4, "Good service!", new Date()));
+        this.commentRepository.save(new Comment(null, "Emma Jones", profile5, "Highly recommended!", new Date()));
+        this.commentRepository.save(new Comment(null, "Daniel Davis", profile2, "Awesome!", new Date()));
+        this.commentRepository.save(new Comment(null, "Olivia Miller", profile3, "Very satisfied!", new Date()));
+        this.commentRepository.save(new Comment(null, "David Taylor", profile5, "Fantastic experience!", new Date()));
+        this.commentRepository.save(new Comment(null, "Sophia Anderson", profile2, "Will use again!", new Date()));
     }
 
     private void saveImages() {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,6 +43,7 @@ public class CommentService {
 
     public CommentDTO createComment(CommentDTO commentDTO) {
         Comment comment = convertToEntity(commentDTO);
+        comment.setCreatedAt(new Date());
         Comment createdComment = commentRepository.save(comment);
         return convertToDto(createdComment);
     }
@@ -79,7 +81,7 @@ public class CommentService {
         comment.setAuthor(commentDTO.getAuthor());
         comment.setCommentedProfile(commentDTO.getCommentedProfile());
         comment.setContent(commentDTO.getContent());
-        comment.setCreatedAt(commentDTO.getCreatedAt());
+
         return comment;
     }
 }

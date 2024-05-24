@@ -1,50 +1,57 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
-import { api } from "../../api/axios";
+import { Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
 import "./CommentFormStyles.css";
 
 const CommentForm = ({ userId }) => {
-    const [comment, setComment] = useState("");
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [author, setAuthor] = useState("");
+    const [content, setContent] = useState("");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         try {
-            const newComment = {
-                content: comment,
+            const response = await axios.post("/api/comments", {
+                author: author,
+                content: content,
                 commentedProfile: { profileId: userId }
-            };
-
-            await api.post("/comments", newComment);
-            setSuccess("Komentarz został dodany.");
-            setComment("");
-            setError(null);
-        } catch (err) {
-            setError("Wystąpił błąd podczas dodawania komentarza.");
-            setSuccess(null);
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            console.log("Comment added:", response.data);
+            setAuthor("");
+            setContent("");
+        } catch (error) {
+            console.error("Error adding comment:", error);
         }
     };
 
     return (
         <Container className="comment-form-container mt-3">
             <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="author">
+                    <Form.Label className="comment-form-label">Nazwa autora</Form.Label>
+                    <Form.Control
+                        type="text"
+                        value={author}
+                        onChange={(e) => setAuthor(e.target.value)}
+                        className="comment-form-textarea"
+                    />
+                </Form.Group>
                 <Form.Group controlId="commentForm">
                     <Form.Label className="comment-form-label">Dodaj komentarz</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={3}
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
                         className="comment-form-textarea"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit" className="comment-form-button">
                     Dodaj
                 </Button>
-                {success && <Alert variant="success" className="mt-3">{success}</Alert>}
-                {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
             </Form>
         </Container>
     );
