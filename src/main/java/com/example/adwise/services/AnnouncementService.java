@@ -5,6 +5,7 @@ import com.example.adwise.entities.Announcement;
 import com.example.adwise.exceptions.ResourceNotFoundException;
 import com.example.adwise.repositories.AnnouncementRepository;
 import com.example.adwise.repositories.ImageRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,13 @@ public class AnnouncementService {
 
     public Iterable<AnnouncementDTO> getAllAnnouncements() {
         Iterable<Announcement> announcements = announcementRepository.findAll();
+        List<AnnouncementDTO> announcementDTOs = new ArrayList<>();
+        announcements.forEach(announcement -> announcementDTOs.add(convertToDto(announcement)));
+        return announcementDTOs;
+    }
+
+    public Iterable<AnnouncementDTO> getAllAnnouncementsForProfile(Long id) {
+        Iterable<Announcement> announcements = announcementRepository.findAllByProfileId_ProfileId(id);
         List<AnnouncementDTO> announcementDTOs = new ArrayList<>();
         announcements.forEach(announcement -> announcementDTOs.add(convertToDto(announcement)));
         return announcementDTOs;
@@ -82,7 +90,9 @@ public class AnnouncementService {
         return convertToDto(updatedAnnouncement);
     }
 
+    @Transactional
     public void deleteAnnouncement(Long id) {
+        imageRepository.deleteByAnnouncementId_AnnouncementId(id);
         announcementRepository.deleteById(id);
     }
 

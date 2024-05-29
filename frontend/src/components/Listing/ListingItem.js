@@ -7,60 +7,48 @@ import { api } from "../../api/axios";
 
 const ListingItem = ({ announcementId, title, description, regionId, image }) => {
     const history = useHistory();
-    const [isAdmin, setIsAdmin] = useState(localStorage.getItem("role") === "admin");
+    const [deleting, setDeleting] = useState(false);
 
     const handleListingClick = () => {
         history.push(`/announcement/${announcementId}`);
     };
 
-    const handleDeleteListing = async () => {
+    const handleDeleteListing = async (event) => {
+        event.stopPropagation();
         try {
             await api.delete(`announcements/${announcementId}`);
+            // Po usunięciu ogłoszenia odśwież stronę
+            window.location.reload();
         } catch (error) {
             console.error("Error deleting listing:", error);
         }
     };
 
-    if (!image || !image.type.startsWith("image/")) {
-        return (
-            <Row className="listing-item" onClick={handleListingClick}>
-                <Col xs={12} md={9} className="listing-details">
-                    <h5>{title}</h5>
-                    <p>{description}</p>
-                    <p className="text-muted">{regionId.name}</p>
-                </Col>
-                {isAdmin && (
-                    <Col xs={12} md={3} className="listing-delete">
-                        <Button variant="danger" onClick={handleDeleteListing}>Usuń</Button>
-                    </Col>
-                )}
-            </Row>
-        );
-    }
-
     let imageUrl;
     try {
-        imageUrl = URL.createObjectURL(image);
+        imageUrl = image ? URL.createObjectURL(image) : null;
     } catch (error) {
         console.error("Error creating object URL:", error);
-        return null;
+        imageUrl = null;
     }
 
     return (
         <Row className="listing-item" onClick={handleListingClick}>
-            <Col xs={12} md={9} className="listing-details">
+            <Col xs={12} md={3} className="listing-image">
+                {imageUrl ? (
+                    <img src={imageUrl} alt="Listing" />
+                ) : (
+                    <p>No Image</p>
+                )}
+            </Col>
+            <Col xs={12} md={6} className="listing-details">
                 <h5>{title}</h5>
                 <p>{description}</p>
                 <p className="text-muted">{regionId.name}</p>
             </Col>
-            <Col xs={12} md={3} className="listing-image">
-                <img src={imageUrl} alt="Listing" />
+            <Col xs={12} md={3} className="listing-delete">
+                <Button variant="danger" onClick={handleDeleteListing}>Usuń</Button>
             </Col>
-            {isAdmin && (
-                <Col xs={12} className="listing-delete">
-                    <Button variant="danger" onClick={handleDeleteListing}>Usuń</Button>
-                </Col>
-            )}
         </Row>
     );
 };

@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AnnouncementRepository extends CrudRepository<Announcement, Long> {
+    Iterable<Announcement> findAllByProfileId_ProfileId(Long id);
     Iterable<Announcement> findByProfileIdProfileId(Long profileId);
 }

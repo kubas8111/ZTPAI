@@ -17,7 +17,7 @@ const AnnouncementPage = () => {
     useEffect(() => {
         const fetchAnnouncement = async () => {
             try {
-                const response = await api.get(`full-announcements/${id}`);
+                const response = await api.get(`announcements/${id}`);
                 setAnnouncement(response.data);
             } catch (error) {
                 setError(error.message);

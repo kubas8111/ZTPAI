@@ -23,7 +23,7 @@ const ProfilePage = () => {
             try {
                 const [userResponse, announcementsResponse, commentsResponse] = await Promise.all([
                     api.get(`/profiles/${id}`),
-                    api.get(`/full-announcements/user/${id}`),
+                    api.get(`/announcements/user/${id}`),
                     api.get(`/comments/user/${id}`)
                 ]);
                 setUser(userResponse.data);

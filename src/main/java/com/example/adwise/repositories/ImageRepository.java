@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ImageRepository extends CrudRepository<Image, Long> {
     Image findByAnnouncementId(Announcement announcementId);
+    void deleteByAnnouncementId_AnnouncementId(Long announcementId);
 }

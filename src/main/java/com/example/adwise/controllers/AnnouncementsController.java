@@ -28,6 +28,12 @@ public class AnnouncementsController {
         return new ResponseEntity<>(announcementDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Iterable<AnnouncementDTO>> getAllAnnouncementsForProfile(@PathVariable Long id) {
+        Iterable<AnnouncementDTO> announcements = announcementService.getAllAnnouncementsForProfile(id);
+        return new ResponseEntity<>(announcements, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> createAnnouncement(@RequestBody AnnouncementDTO announcementDTO) {
         try {
