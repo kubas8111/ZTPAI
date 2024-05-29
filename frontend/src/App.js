@@ -6,6 +6,8 @@ import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import AnnouncementPage from "./pages/AnnouncementPage";
 import RegisterPage from "./pages/RegisterPage";
+import AddAnnouncementPage from "./pages/AddAnnouncementPage";
+import ModeratePage from "./pages/ModeratePage";
 
 const App = () => {
     return (
@@ -17,9 +19,10 @@ const App = () => {
                 <Route path="/register" component={RegisterPage} />
                 <Route path="/search" component={SearchPage} />
                 <Route path="/profile/:id" component={ProfilePage} />
+                <Route path="/moderate" component={ModeratePage} />
 
                 <Route path="/announcement/:id" component={AnnouncementPage} />
-                {/*<PrivateRoute path="/addAnnouncement" component={AddAnnouncementPage} />*/}
+                <Route path="/addAnnouncement" component={AddAnnouncementPage} />
             </Switch>
         </Router>
     );

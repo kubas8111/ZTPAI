@@ -29,9 +29,14 @@ public class AnnouncementsController {
     }
 
     @PostMapping
-    public ResponseEntity<AnnouncementDTO> createAnnouncement(@RequestBody AnnouncementDTO announcementDTO) {
-        AnnouncementDTO createdAnnouncementDTO = announcementService.createAnnouncement(announcementDTO);
-        return new ResponseEntity<>(createdAnnouncementDTO, HttpStatus.CREATED);
+    public ResponseEntity<?> createAnnouncement(@RequestBody AnnouncementDTO announcementDTO) {
+        try {
+            AnnouncementDTO createdAnnouncementDTO = announcementService.createAnnouncement(announcementDTO);
+            return new ResponseEntity<>(createdAnnouncementDTO, HttpStatus.CREATED);
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

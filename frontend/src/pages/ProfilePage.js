@@ -17,7 +17,6 @@ const ProfilePage = () => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const currentUserId = 1; // Replace this with actual logic to get the current user ID
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -40,6 +39,15 @@ const ProfilePage = () => {
         fetchUserData();
     }, [id]);
 
+    const fetchComments = async () => {
+        try {
+            const response = await api.get(`/comments/user/${id}`);
+            setComments(response.data);
+        } catch (error) {
+            console.error("Error fetching comments:", error);
+        }
+    };
+
     return (
         <>
             <CustomNavbar />
@@ -52,7 +60,7 @@ const ProfilePage = () => {
                         <Col md={8}>
                             <h3>Ogłoszenia użytkownika</h3>
                             <ListingsGrid listings={announcements} />
-                            <CommentForm userId={id} authorId={currentUserId} />
+                            <CommentForm userId={id} fetchComments={fetchComments} />
                             <CommentList comments={comments} />
                         </Col>
                         <Col md={4}>

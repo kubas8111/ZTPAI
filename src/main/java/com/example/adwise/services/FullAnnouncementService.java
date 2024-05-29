@@ -64,10 +64,10 @@ public class FullAnnouncementService {
         dto.setContactEmail(announcement.getContactEmail());
         dto.setContactPhone(announcement.getContactPhone());
 
-        Image image = imageRepository.findByAnnouncementId(announcement);
-        if (image != null) {
-            dto.setImageUrl(image.getImageURL());
-        }
+//        Image image = imageRepository.findByAnnouncementId(announcement);
+//        if (image != null) {
+//            dto.setImageUrl(image.getImageURL());
+//        }
         return dto;
     }
 }

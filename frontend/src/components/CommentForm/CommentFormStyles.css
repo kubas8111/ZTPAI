@@ -6,6 +6,12 @@
     font-weight: bold;
 }
 
+.comment-form-input {
+    width: 100%;
+    min-height: 40px;
+    margin-bottom: 10px;
+}
+
 .comment-form-textarea {
     width: 100%;
     min-height: 100px;

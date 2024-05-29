@@ -1,6 +1,8 @@
 package com.example.adwise.configuration;
 
+import com.example.adwise.entities.Profile;
 import com.example.adwise.exceptions.ExpiredRefreshTokenException;
+import com.example.adwise.services.ProfileSharedService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,13 +16,14 @@ import java.util.List;
 
 @Component
 public class JwtTokenUtil {
+    private ProfileSharedService profileSharedService;
     private SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    public String generateToken(String email, boolean isAdmin) {
+    public String generateToken(String email, boolean isAdmin, Long id) {
         String claims = isAdmin ? "admin" : "user";
         long expirationTime = 1000 * 15;
 
-        return Jwts.builder().subject(email).claim("role", claims).issuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder().subject(email).claim("role", claims).claim("id", id).issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationTime)).signWith(secretKey).compact();
     }
 
@@ -36,11 +39,13 @@ public class JwtTokenUtil {
         String subject = this.getSubjectFromToken(refreshToken);
         Claims claim = this.getClaimsFromToken(refreshToken);
 
+
         if (this.validateToken(refreshToken, subject)) {
+            Profile signedInProfile = this.profileSharedService.getProfileByEmail(subject);
             Object roleClaim = claim.get("role");
             boolean isAdmin = "admin".equals(roleClaim);
 
-            return this.generateToken(subject, isAdmin);
+            return this.generateToken(subject, isAdmin, signedInProfile.getProfileId());
         } else {
             throw new ExpiredRefreshTokenException("Token is not valid");
         }

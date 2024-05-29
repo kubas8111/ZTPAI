@@ -26,7 +26,7 @@ public class AuthService {
 
         Profile signedInProfile = this.profileSharedService.getProfileByEmail(profile.getEmail());
         String access = this.jwtTokenUtil.generateToken(signedInProfile.getEmail(),
-                signedInProfile.getIsAdmin());
+                signedInProfile.getIsAdmin(), signedInProfile.getProfileId());
         String refresh = this.jwtTokenUtil.generateRefreshToken(signedInProfile.getEmail(), signedInProfile.getIsAdmin());
 
         return new JwtDTO(access, refresh);

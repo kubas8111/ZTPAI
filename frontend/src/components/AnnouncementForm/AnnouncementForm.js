@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import { api } from "../../api/axios";
 import "./AnnouncementFormStyles.css";
 
 const AnnouncementForm = () => {
@@ -17,15 +17,16 @@ const AnnouncementForm = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedRegion, setSelectedRegion] = useState("");
     const [selectedTag, setSelectedTag] = useState("");
-    const [image, setImage] = useState(null);
+    const [userId, setUserId] = useState("");
+
     const history = useHistory();
 
     useEffect(() => {
-        const fetchOptions = async () => {
+        const fetchData = async () => {
             try {
-                const categoryResponse = await axios.get("http://localhost:8080/api/categories");
-                const regionResponse = await axios.get("http://localhost:8080/api/regions");
-                const tagResponse = await axios.get("http://localhost:8080/api/tags");
+                const categoryResponse = await api.get("categories");
+                const regionResponse = await api.get("regions");
+                const tagResponse = await api.get("tags");
 
                 setCategoryOptions(categoryResponse.data);
                 setRegionOptions(regionResponse.data);
@@ -35,16 +36,57 @@ const AnnouncementForm = () => {
             }
         };
 
-        fetchOptions();
+        fetchData();
+
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
+            const decodedToken = parseJwt(accessToken);
+            setUserId(decodedToken.id);
+        }
     }, []);
 
-    const handleSubmit = (event) => {
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split(".")[1]));
+        } catch (error) {
+            return null;
+        }
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        try {
+            const data = {
+                profileId: { profileId: userId },
+                categoryId: { categoryId: Number.parseInt(selectedCategory) },
+                regionId: { regionId: Number.parseInt(selectedRegion) },
+                tagId: { tagId: Number.parseInt(selectedTag) },
+                title: title,
+                price: price,
+                description: description,
+                contactName: contactName,
+                contactEmail: contactEmail,
+                contactPhone: contactPhone
+            };
+
+            const response = await api.post("announcements", data, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                },
+            });
+
+            const newAnnouncementId = response.data.announcementId;
+            history.push(`/announcement/${newAnnouncementId}`);
+        } catch (error) {
+            console.error("Error adding announcement:", error);
+        }
     };
 
     const handleImageChange = (event) => {
-        setImage(event.target.files[0]);
+        // Obsługa zmiany zdjęcia
     };
+
+    console.log(userId);
 
     return (
         <Container className="add-announcement-container">
@@ -84,41 +126,58 @@ const AnnouncementForm = () => {
 
                         <Form.Group controlId="formBasicCategory">
                             <Form.Label>Kategoria</Form.Label>
-                            <Form.Control as="select" value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                            <Form.Control
+                                as="select"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
                                 <option value="">Wybierz kategorię</option>
+
                                 {categoryOptions.map((category) => (
-                                    <option key={category.id} value={category.id}>{category.name}</option>
+                                    <option key={category.categoryId} value={category.categoryId}>
+                                        {category.name}
+                                    </option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicRegion">
                             <Form.Label>Region</Form.Label>
-                            <Form.Control as="select" value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
+                            <Form.Control
+                                as="select"
+                                value={selectedRegion}
+                                onChange={(e) => setSelectedRegion(e.target.value)}
+                            >
                                 <option value="">Wybierz region</option>
                                 {regionOptions.map((region) => (
-                                    <option key={region.id} value={region.id}>{region.name}</option>
+                                    <option key={region.regionId} value={region.regionId}>
+                                        {region.name}
+                                    </option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group controlId="formBasicTag">
                             <Form.Label>Tag</Form.Label>
-                            <Form.Control as="select" value={selectedTag} onChange={(e) => setSelectedTag(e.target.value)}>
+                            <Form.Control
+                                as="select"
+                                value={selectedTag}
+                                onChange={(e) => setSelectedTag(e.target.value)}
+                            >
                                 <option value="">Wybierz tag</option>
                                 {tagOptions.map((tag) => (
-                                    <option key={tag.id} value={tag.id}>{tag.name}</option>
+                                    <option key={tag.tagId} value={tag.tagId}>
+                                        {tag.name}
+                                    </option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
 
-                        {/* Pole wyboru zdjęcia */}
                         <Form.Group controlId="formBasicImage">
                             <Form.Label>Zdjęcie</Form.Label>
                             <Form.Control type="file" onChange={handleImageChange} />
                         </Form.Group>
 
-                        {/* Przycisk submit */}
                         <Button variant="primary" type="submit" className="btn-block">
                             Dodaj ogłoszenie
                         </Button>

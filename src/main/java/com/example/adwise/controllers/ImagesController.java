@@ -3,8 +3,11 @@ package com.example.adwise.controllers;
 import com.example.adwise.DTO.ImageDTO;
 import com.example.adwise.services.ImageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/images")
@@ -28,8 +31,8 @@ public class ImagesController {
         return new ResponseEntity<>(image, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<ImageDTO> createImage(@RequestBody ImageDTO imageDTO) {
+    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<ImageDTO> createImage(@RequestBody ImageDTO imageDTO) throws IOException {
         ImageDTO createdImage = imageService.createImage(imageDTO);
         return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
     }

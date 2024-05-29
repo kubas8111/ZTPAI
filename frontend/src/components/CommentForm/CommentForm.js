@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import axios from "axios";
+import { api } from "../../api/axios";
 import "./CommentFormStyles.css";
 
-const CommentForm = ({ userId }) => {
+const CommentForm = ({ userId, fetchComments }) => {
     const [author, setAuthor] = useState("");
     const [content, setContent] = useState("");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post("/api/comments", {
+            await api.post("comments", {
                 author: author,
                 content: content,
                 commentedProfile: { profileId: userId }
             }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
             });
-            console.log("Comment added:", response.data);
             setAuthor("");
             setContent("");
+            fetchComments();
         } catch (error) {
             console.error("Error adding comment:", error);
         }
@@ -36,7 +33,7 @@ const CommentForm = ({ userId }) => {
                         type="text"
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
-                        className="comment-form-textarea"
+                        className="comment-form-input"
                     />
                 </Form.Group>
                 <Form.Group controlId="commentForm">

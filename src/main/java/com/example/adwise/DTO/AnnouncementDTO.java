@@ -5,6 +5,7 @@ import com.example.adwise.entities.Profile;
 import com.example.adwise.entities.Region;
 import com.example.adwise.entities.Tag;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -23,5 +24,6 @@ public class AnnouncementDTO {
     private String contactName;
     private String contactEmail;
     private String contactPhone;
-    private String imageUrl;
+    private String image;
+//    private MultipartFile image;
 }
