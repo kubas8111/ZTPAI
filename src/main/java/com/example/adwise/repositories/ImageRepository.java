@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface ImageRepository extends CrudRepository<Image, Long> {
-    Image findByAnnouncementId(Announcement announcementId);
+    Optional<Image> findByAnnouncementId_AnnouncementId(Long announcementId);
     void deleteByAnnouncementId_AnnouncementId(Long announcementId);
 }

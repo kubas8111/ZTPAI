@@ -1,6 +1,7 @@
 package com.example.adwise.controllers;
 
 import com.example.adwise.DTO.ImageDTO;
+import com.example.adwise.entities.Image;
 import com.example.adwise.services.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,22 +20,35 @@ public class ImagesController {
         this.imageService = imageService;
     }
 
+//    @GetMapping
+//    public ResponseEntity<Iterable<ImageDTO>> getAllImages() {
+//        Iterable<ImageDTO> images = imageService.getAllImages();
+//        return new ResponseEntity<>(images, HttpStatus.OK);
+//    }
+
     @GetMapping
-    public ResponseEntity<Iterable<ImageDTO>> getAllImages() {
-        Iterable<ImageDTO> images = imageService.getAllImages();
+    public ResponseEntity<Iterable<Image>> getAllImages() {
+        Iterable<Image> images = imageService.getAllImagess();
         return new ResponseEntity<>(images, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ImageDTO> getImageById(@PathVariable Long id) {
-        ImageDTO image = imageService.getImageById(id);
-        return new ResponseEntity<>(image, HttpStatus.OK);
+    public ResponseEntity<?> getImageByAnnouncementId(@PathVariable Long id) throws IOException {
+        byte[] imageContent = imageService.getImageByAnnouncementId(id);
+        return new ResponseEntity<>(imageContent, HttpStatus.OK);
     }
 
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ImageDTO> createImage(@RequestBody ImageDTO imageDTO) throws IOException {
-        ImageDTO createdImage = imageService.createImage(imageDTO);
-        return new ResponseEntity<>(createdImage, HttpStatus.CREATED);
+    @PostMapping(value = "/", consumes = "multipart/form-data")
+    public ResponseEntity<?> createImage(@ModelAttribute ImageDTO imageDTO) {
+        try {
+            ImageDTO createdImage = imageService.createImage(imageDTO);
+            byte[] imageContent = imageDTO.getImageFileContent();
+//            System.out.println(imageDTO.getImageFile());
+            return new ResponseEntity<>(imageContent, HttpStatus.CREATED);
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

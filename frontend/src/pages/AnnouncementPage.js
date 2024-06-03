@@ -13,20 +13,24 @@ const AnnouncementPage = () => {
     const [announcement, setAnnouncement] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [image, setImage] = useState(null);
 
     useEffect(() => {
         const fetchAnnouncement = async () => {
             try {
                 const response = await api.get(`announcements/${id}`);
                 setAnnouncement(response.data);
+
+                // Fetch the image as a blob
+                const imageResponse = await api.get(`images/${response.data.announcementId}`, { responseType: 'blob' });
+                // const imageResponse = await api.get(`images/6`, { responseType: 'blob' });
+                setImage(imageResponse.data);
             } catch (error) {
                 setError(error.message);
             } finally {
                 setLoading(false);
             }
         };
-
-        console.log(id);
 
         fetchAnnouncement();
     }, [id]);
@@ -37,11 +41,11 @@ const AnnouncementPage = () => {
             <Container className="mt-3">
                 <SearchBar />
                 {loading && <p>Loading...</p>}
-                {error && <p>Error: {error}</p>}
+                {/*{error && <p>Error: {error}</p>}*/}
                 {announcement && (
                     <Row>
                         <Col md={8}>
-                            <AnnouncementDetails announcement={announcement} />
+                            <AnnouncementDetails announcement={announcement} image={image} />
                         </Col>
                         <Col md={4}>
                             <UserInfo announcement={announcement} />

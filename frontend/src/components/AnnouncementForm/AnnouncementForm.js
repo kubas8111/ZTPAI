@@ -18,6 +18,7 @@ const AnnouncementForm = () => {
     const [selectedRegion, setSelectedRegion] = useState("");
     const [selectedTag, setSelectedTag] = useState("");
     const [userId, setUserId] = useState("");
+    const [imageFile, setImageFile] = useState(null);
 
     const history = useHistory();
 
@@ -76,6 +77,19 @@ const AnnouncementForm = () => {
             });
 
             const newAnnouncementId = response.data.announcementId;
+
+            const formData = new FormData();
+            formData.append("announcementId", newAnnouncementId);
+            formData.append("imageFile", imageFile);
+
+            await api.post("images/", formData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+                .then(()=> {history.push(`/announcement/${newAnnouncementId}`);});
+
             history.push(`/announcement/${newAnnouncementId}`);
         } catch (error) {
             console.error("Error adding announcement:", error);
@@ -83,10 +97,10 @@ const AnnouncementForm = () => {
     };
 
     const handleImageChange = (event) => {
-        // Obsługa zmiany zdjęcia
+        setImageFile(event.target.files[0]);
     };
 
-    console.log(userId);
+    // console.log(userId);
 
     return (
         <Container className="add-announcement-container">

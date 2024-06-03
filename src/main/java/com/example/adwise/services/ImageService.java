@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Service
 public class ImageService {
     private final ImageRepository imageRepository;
-    private final String uploadDir = "/uploads";
+    private final String uploadDir = "src/main/resources/static/temp";
 
     public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
@@ -32,20 +33,36 @@ public class ImageService {
         return imageDTOs;
     }
 
-    public ImageDTO getImageById(Long id) {
-        Image image = imageRepository.findById(id)
+    public Iterable<Image> getAllImagess() {
+        Iterable<Image> images = imageRepository.findAll();
+        return images;
+    }
+
+    public byte[] getImageByAnnouncementId(Long id) throws IOException {
+        Image image = imageRepository.findByAnnouncementId_AnnouncementId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Image not found with id: " + id));
-        return convertToDto(image);
+        String imagePath = image.getImageURL();
+
+//        System.out.println(imagePath);
+
+        Path filePath = Paths.get(imagePath);
+        byte[] fileContent = Files.readAllBytes(filePath);
+        return fileContent;
     }
 
     public ImageDTO createImage(ImageDTO imageDTO) throws IOException {
-        System.out.println("weszło");
 
         Image image = new Image();
         image.setAnnouncementId(imageDTO.getAnnouncementId());
-        image.setImageURL(saveImage(imageDTO.getImageFile()));
+
+        String fileName = imageDTO.getAnnouncementId().getAnnouncementId().toString() + ".png";
+        Path filePath = Paths.get(uploadDir, fileName);
+
+        Files.copy(imageDTO.getImageFile().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        image.setImageURL(filePath.toString());
         Image createdImage = imageRepository.save(image);
-        System.out.println("wyszło chyba");
+
         return convertToDto(createdImage);
     }
 
@@ -54,7 +71,11 @@ public class ImageService {
                 .orElseThrow(() -> new ResourceNotFoundException("Image not found with id: " + id));
 
         existingImage.setAnnouncementId(imageDTO.getAnnouncementId());
-        existingImage.setImageURL(imageDTO.getImageURL());
+
+        String fileName = imageDTO.getAnnouncementId().getAnnouncementId().toString() + ".png";
+        Path filePath = Paths.get(uploadDir, fileName);
+
+        existingImage.setImageURL(filePath.toString());
 
         Image updatedImage = imageRepository.save(existingImage);
         return convertToDto(updatedImage);
@@ -68,7 +89,6 @@ public class ImageService {
         ImageDTO imageDTO = new ImageDTO();
         imageDTO.setImageId(image.getImageId());
         imageDTO.setAnnouncementId(image.getAnnouncementId());
-        imageDTO.setImageURL(image.getImageURL());
         return imageDTO;
     }
 
@@ -76,20 +96,6 @@ public class ImageService {
         Image image = new Image();
         image.setImageId(imageDTO.getImageId());
         image.setAnnouncementId(imageDTO.getAnnouncementId());
-        image.setImageURL(imageDTO.getImageURL());
         return image;
-    }
-
-    public String saveImage(MultipartFile imageFile) throws IOException {
-        String fileName = UUID.randomUUID().toString() + StringUtils.cleanPath(imageFile.getOriginalFilename());
-        Path uploadPath = Paths.get(uploadDir);
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(imageFile.getInputStream(), filePath);
-        return "/images/" + fileName;
     }
 }

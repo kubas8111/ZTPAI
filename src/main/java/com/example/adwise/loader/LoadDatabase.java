@@ -39,7 +39,7 @@ public class LoadDatabase implements CommandLineRunner {
             saveRegions();
             saveAnnouncements();
             saveComments();
-            saveImages();
+//            saveImages();
         }
     }
 

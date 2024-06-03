@@ -35,7 +35,7 @@ const SearchPage = () => {
                 <SearchBar />
                 <Filters />
                 {loading && <p>Loading...</p>}
-                {error && <p>Error: {error}</p>}
+                {/*{error && <p>Error: {error}</p>}*/}
                 <ListingsGrid listings={listings} />
             </Container>
             <Footer />
